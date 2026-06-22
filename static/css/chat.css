@@ -1,0 +1,126 @@
+/* Chat UI styling - dark mode with glassmorphism bubbles */
+
+:root {
+  --bg-color: hsl(210, 15%, 12%);
+  --primary-color: hsl(220, 90%, 55%);
+  --bubble-bg: hsla(220, 80%, 20%, 0.6);
+  --bubble-border: hsla(220, 80%, 30%, 0.4);
+  --text-color: hsl(0, 0%, 90%);
+  --input-bg: hsla(220, 80%, 15%, 0.8);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden;
+}
+
+#chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.message-bubble {
+  align-self: flex-start;
+  max-width: 85%;
+  background: var(--bubble-bg);
+  border: 1px solid var(--bubble-border);
+  border-radius: 18px;
+  padding: 0.8rem 1.2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.online-header {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.message-bubble.self {
+    align-self: flex-end;
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message-bubble .emoji {
+  font-size: 1.4rem;
+}
+
+.message-bubble .text {
+  flex: 1;
+  word-break: break-word;
+}
+
+#input-form {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+#input-form input[type="text"] {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+#input-form button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+#input-form button:hover {
+  background: hsl(220, 90%, 45%);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  #chat-container {
+    padding: 0.5rem;
+  }
+  .message-bubble {
+    max-width: 100%;
+  }
+}
