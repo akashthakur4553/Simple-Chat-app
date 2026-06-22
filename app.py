@@ -3,12 +3,20 @@ from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
 from fastapi.websockets import WebSocket
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from manager import WebSocketManager
 
 app = FastAPI()
 
 # Mount static assets (css, js)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],            # <-- Change to specific origins for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 templates = Jinja2Templates(directory="templates")
 
