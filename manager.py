@@ -64,11 +64,28 @@ class WebSocketManager:
         await self._broadcast(payload)
 
     async def _broadcast(self, payload: dict):
+        # Send payload to all clients, removing any that are no longer connected
+        dead_clients = []
         for client in self.connected_clients:
-            await client.send_json(payload)
+            try:
+                await client.send_json(payload)
+            except Exception as e:
+                # Log and mark for removal
+                print(f"Error sending to client {client.client.host}:{client.client.port} - {e}")
+                dead_clients.append(client)
+        # Clean up dead clients
+        for dc in dead_clients:
+            self.connected_clients.remove(dc)
+            client_key = f"{dc.client.host}:{dc.client.port}"
+            self.ip_to_emoji.pop(client_key, None)
+            self.ip_to_name.pop(client_key, None)
 
     async def disconnect(self, websocket: WebSocket):
         if websocket in self.connected_clients:
             self.connected_clients.remove(websocket)
-            # Keep emoji mapping; broadcast updated presence
-            await self.broadcast_presence()    
+            # Remove emoji and name mapping for this client
+            client_key = f"{websocket.client.host}:{websocket.client.port}"
+            self.ip_to_emoji.pop(client_key, None)
+            self.ip_to_name.pop(client_key, None)
+            # Broadcast updated presence without the disconnected client
+            await self.broadcast_presence()

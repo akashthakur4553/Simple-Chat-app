@@ -66,6 +66,12 @@ ws.addEventListener('close', () => {
   console.log('WebSocket connection closed');
 });
 
+window.addEventListener('beforeunload', () => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.close();
+  }
+});
+
 // Form handling
 const form = document.getElementById('input-form');
 const messageInput = document.getElementById('message');
